@@ -1,0 +1,25 @@
+
+.result-wrapper.data-v-22b0c650 {
+  width: 100%;
+  font-size: 36rpx;
+  color: #1a1a44cc;
+}
+.result-title.data-v-22b0c650 {
+  margin-bottom: 30rpx;
+  font-size: 38rpx;
+}
+.result-content.data-v-22b0c650 {
+  width: 100%;
+  margin: 0 auto;
+  padding: 30rpx;
+  box-sizing: border-box;
+  border: 1px solid #1a1a44cc;
+  /* box-shadow: 1px 1px 1px #1a1a44cc; */
+}
+.info-item.data-v-22b0c650 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 20rpx 0;
+}
+

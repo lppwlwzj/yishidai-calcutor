@@ -1,0 +1,21 @@
+
+image.data-v-57bb4cfa {
+  display: flex;
+  justify-content: center;
+  width: 90%;
+  margin: 70rpx auto 100rpx;
+}
+.contact-content.data-v-57bb4cfa {
+  width: 90%;
+  margin: 70rpx auto;
+  border: 1px solid #1a1a44cc;
+  height: 400rpx;
+}
+.contact-item.data-v-57bb4cfa {
+  width: 100%;
+  padding: 40rpx;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+}
+

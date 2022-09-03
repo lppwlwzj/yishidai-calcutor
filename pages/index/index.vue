@@ -41,7 +41,7 @@ export default {
     },
     contact() {
       uni.navigateTo({
-        url: '../contact/index',
+        url: '/pages/contact/index',
         animationType: 'pop-in',
         animationDuration: 200,
       })
