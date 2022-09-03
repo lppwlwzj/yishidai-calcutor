@@ -26,7 +26,6 @@ import uniCurb from '@/components/uni-curb/index.vue'
 export default {
   data() {
     return {
-      isShowContact: false,
       title: '内部成本计算器',
       active: 0,
     }
@@ -41,7 +40,11 @@ export default {
       this.active = val
     },
     contact() {
-      this.isShowContact = true
+      uni.navigateTo({
+        url: '../contact/index',
+        animationType: 'pop-in',
+        animationDuration: 200,
+      })
     },
     // handleAmountPickerChange(e) {
     //   this.selectAmount = e.detail.value
