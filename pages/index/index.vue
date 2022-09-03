@@ -2,7 +2,7 @@
   <view class="cal-content">
     <view class="cal-title">
       <text class="title">{{ title }}</text>
-      <text class="contact">联系我们</text>
+      <text class="contact" @click="contact">联系我们</text>
     </view>
     <view class="cal-tab">
       <view :class="['tab', { active: active === 0 }]" @click="handleClick(0)"
@@ -26,6 +26,7 @@ import uniCurb from '@/components/uni-curb/index.vue'
 export default {
   data() {
     return {
+      isShowContact: false,
       title: '内部成本计算器',
       active: 0,
     }
@@ -38,6 +39,9 @@ export default {
   methods: {
     handleClick(val) {
       this.active = val
+    },
+    contact() {
+      this.isShowContact = true
     },
     // handleAmountPickerChange(e) {
     //   this.selectAmount = e.detail.value

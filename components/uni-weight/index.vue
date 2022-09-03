@@ -23,13 +23,11 @@
       <view class="label select">
         <picker
           @change="handleAmountPickerChange"
-          :value="form.selectAmount"
+          :value="selectAmount"
           :range="amountOptions"
           range-key="label"
         >
-          <view class="uni-input">{{
-            amountOptions[form.selectAmount].label
-          }}</view>
+          <view class="uni-input">{{ amountOptions[selectAmount].label }}</view>
         </picker>
       </view>
       <input class="input" type="number" v-model="form.amount" placeholder="" />
@@ -40,20 +38,18 @@
       <view class="input">
         <picker
           @change="handleWeightPickerChange"
-          :value="form.selectWeight"
+          :value="selectWeight"
           :range="weightOptions"
           range-key="label"
         >
-          <view class="uni-input">{{
-            weightOptions[form.selectWeight].label
-          }}</view>
+          <view class="uni-input">{{ weightOptions[selectWeight].label }}</view>
         </picker>
       </view>
     </view>
-    <!-- <uni-result  v-show="showResult"></uni-result> -->
+    <uni-result v-show="isShowResult" :resultList="resultList"></uni-result>
 
     <view class="btn-groups">
-      <button class="left" type="default">清空</button>
+      <button class="left" type="default" @click="handleReset">清空</button>
       <button
         :class="['right', { disabled: disabled }]"
         type="default"
@@ -67,27 +63,13 @@
 
 <script>
 import uniResult from '@/components/uni-result/index.vue'
-// const waysOfCalMap = {
-//   1: {
-//     1: (val) => {},
-//     2: (val) => {},
-//     3: (val) => {},
-//     4: (val) => {},
-//   },
-//   2: {
-//     1: (val) => {},
-//     2: (val) => {},
-//     3: (val) => {},
-//     4: (val) => {},
-//   },
-// }
 export default {
   data() {
     return {
+      selectAmount: 0,
+      selectWeight: 0,
       isShowResult: false,
       form: {
-        selectAmount: 1,
-        selectWeight: 1,
         len: '',
         width: '',
         amount: '',
@@ -96,46 +78,47 @@ export default {
       amountOptions: [
         {
           label: '平方',
-          value: 1,
         },
         {
           label: '立方',
-          value: 2,
         },
         {
           label: '米',
-          value: 3,
         },
         {
           label: '块',
-          value: 4,
         },
       ],
       weightOptions: [
         {
           label: '成品重量(吨)',
-          value: 1,
         },
         {
           label: '毛板重量(吨)',
-          value: 2,
         },
       ],
-      waysOfCalMap: {
-        1: {
-          1: () => {
-            const { len, width, amount, thickness } = this.form
-            // return
-          },
-          2: () => {},
-          3: () => {},
-          4: () => {},
+      resultList: [],
+      productWeight: 0, //成品重量
+      boardWeight: 0, //毛板重量
+      productWeightCalMap: {
+        0: () => {
+          //=E4*(A4-1)*2.7*0.001
+          const { len, width, amount, thickness } = this.form
+          return amount * (thickness - 1) * 2.7 * 0.001
         },
-        2: {
-          1: () => {},
-          2: () => {},
-          3: () => {},
-          4: () => {},
+        1: () => {
+          const { len, width, amount, thickness } = this.form
+          return amount * 2.7
+        },
+        2: () => {
+          //=G4*(A4-1)*C4*2.7*0.000001
+          const { len, width, amount, thickness } = this.form
+          return amount * (thickness - 1) * width * 2.7 * 0.000001
+        },
+        3: () => {
+          //=(A4-1)*B4*C4*H4*2.7*0.000000001
+          const { len, width, amount, thickness } = this.form
+          return (thickness - 1) * len * width * amount * 2.7 * 0.000000001
         },
       },
     }
@@ -150,8 +133,26 @@ export default {
   },
   onLoad() {},
   methods: {
+    handleReset() {
+      Object.keys(this.form).map((key) => (this.form[key] = ''))
+    },
     handleCal() {
       if (this.disabled) return
+      this.productWeight =
+        this.productWeightCalMap[parseInt(this.selectAmount)]()
+      this.isShowResult = true
+      if (this.selectWeight === 0) {
+        this.resultList.push({
+          label: '成品重量（吨）：',
+          value: this.productWeight,
+        })
+        return
+      }
+      this.boardWeight = parseFloat(this.productWeight) * 1.2
+      this.resultList.push({
+        label: '毛板重量（吨）：',
+        value: this.boardWeight,
+      })
     },
     handleClick(val) {
       this.active = val
@@ -161,10 +162,10 @@ export default {
     },
 
     handleAmountPickerChange(e) {
-      this.form['selectAmount'] = e.detail.value
+      this.selectAmount = e.detail.value
     },
     handleWeightPickerChange(e) {
-      this.form['selectWeight'] = e.detail.value
+      this.selectWeight = e.detail.value
     },
   },
 }

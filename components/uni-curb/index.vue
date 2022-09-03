@@ -31,12 +31,7 @@
 
     <view class="form-item">
       <text class="label">运费</text>
-      <input
-        class="input"
-        type="number"
-        v-model="form.freight"
-        placeholder=""
-      />
+      <input class="input" type="number" v-model="freight" placeholder="" />
     </view>
 
     <view class="form-item">
@@ -44,19 +39,20 @@
       <view class="input">
         <picker
           @change="handlePricePickerChange"
-          :value="form.selectUnitPrice"
+          :value="selectUnitPrice"
           :range="unitPriceOptions"
           range-key="label"
         >
           <view class="uni-input">{{
-            unitPriceOptions[form.selectUnitPrice].label
+            unitPriceOptions[selectUnitPrice].label
           }}</view>
         </picker>
       </view>
     </view>
+    <uni-result v-show="isShowResult" :resultList="resultList"></uni-result>
 
     <view class="btn-groups">
-      <button class="left" type="default">清空</button>
+      <button class="left" type="default" @click="handleReset">清空</button>
       <button
         :class="['right', { disabled: disabled }]"
         type="default"
@@ -69,33 +65,78 @@
 </template>
 
 <script>
+import uniResult from '@/components/uni-result/index.vue'
+
 export default {
   data() {
     return {
+      freight: '',
+      resultList: [],
+      isShowResult: false,
       form: {
-        selectUnitPrice: 1,
         len: '',
         width: '',
         thickness: '',
         cubePrice: '',
-        freight: '',
+        // freight: '',
       },
       unitPriceOptions: [
         {
           label: '每平方单价',
-          value: 1,
         },
         {
           label: '每米单价',
-          value: 2,
         },
         {
           label: '每块单价',
-          value: 3,
         },
       ],
-      selectUnitPrice: 1,
+      selectUnitPrice: 0,
+      factoryCost: 0, //出厂成本
+      freightCost: 0, //运费成本
+      totalCost: 0, //综合成本
+      unitPriceCalMap: {
+        //出厂成本Map
+        factoryCost: {
+          0: () => {
+            //=D15*A15*0.001
+            const { len, width, cubePrice, thickness } = this.form
+            return cubePrice * thickness * 0.001
+          },
+          1: () => {
+            //=A15*C15*D15*0.000001
+            const { len, width, cubePrice, thickness } = this.form
+            return cubePrice * thickness * width * 0.000001
+          },
+          2: () => {
+            //=A15*C15*B15*D15*0.000000001
+            const { len, width, cubePrice, thickness } = this.form
+            return len * cubePrice * thickness * width * 0.000000001
+          },
+        },
+        freightCost: {
+          //运费成本Map
+          0: () => {
+            //=D15*A15*0.001
+            const { len, width, cubePrice, thickness } = this.form
+            return this.freight * thickness * 0.001
+          },
+          1: () => {
+            //=A15*C15*D15*0.000001
+            const { len, width, cubePrice, thickness } = this.form
+            return this.freight * thickness * width * 0.000001
+          },
+          2: () => {
+            //=A15*C15*B15*D15*0.000000001
+            const { len, width, cubePrice, thickness } = this.form
+            return len * this.freight * thickness * width * 0.000000001
+          },
+        },
+      },
     }
+  },
+  components: {
+    uniResult,
   },
   computed: {
     disabled() {
@@ -104,6 +145,9 @@ export default {
   },
   onLoad() {},
   methods: {
+    handleReset() {
+      Object.keys(this.form).map((key) => (this.form[key] = ''))
+    },
     isNil(value) {
       return !value && value !== 0
     },
@@ -112,9 +156,35 @@ export default {
     },
     handleCal() {
       if (this.disabled) return
+      //出厂成本
+      this.factoryCost =
+        this.unitPriceCalMap['factoryCost'][this.selectUnitPrice]()
+
+      //运费成本
+      if (!this.isNil(this.freight)) {
+        this.freightCost =
+          this.unitPriceCalMap['freightCost'][this.selectUnitPrice]()
+      }
+      //综合成本
+      this.totalCost = this.factoryCost + this.freightCost
+      this.resultList = [
+        {
+          label: '出厂成本',
+          value: this.factoryCost,
+        },
+        {
+          label: '运费成本',
+          value: this.freightCost,
+        },
+        {
+          label: '综合成本',
+          value: this.totalCost,
+        },
+      ]
+      this.isShowResult = true
     },
     handlePricePickerChange(e) {
-      this.form['selectUnitPrice'] = e.detail.value
+      this.selectUnitPrice = e.detail.value
     },
   },
 }
