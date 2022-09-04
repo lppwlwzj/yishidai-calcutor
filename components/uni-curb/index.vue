@@ -1,37 +1,29 @@
 <template>
   <view class="form-content">
-    <view class="form-item">
-      <text class="label">长</text>
-      <input class="input" type="number" v-model="form.len" placeholder="" />
-    </view>
-    <view class="form-item">
-      <text class="label">宽</text>
-      <input class="input" type="number" v-model="form.width" placeholder="" />
-    </view>
+    <view class="form-inline">
+      <view class="form-inline-item">
+        <text class="form-inline-label">长</text>
+        <input class="input" type="number" v-model="form.len" />
+      </view>
+      <view class="form-inline-item">
+        <text class="form-inline-label">宽</text>
+        <input class="input" type="number" v-model="form.width" />
+      </view>
 
-    <view class="form-item">
-      <text class="label">厚</text>
-      <input
-        class="input"
-        type="number"
-        v-model="form.thickness"
-        placeholder=""
-      />
+      <view class="form-inline-item">
+        <text class="form-inline-label">厚</text>
+        <input class="input" type="number" v-model="form.thickness" />
+      </view>
     </view>
 
     <view class="form-item">
       <text class="label">立方单价</text>
-      <input
-        class="input"
-        type="number"
-        v-model="form.cubePrice"
-        placeholder=""
-      />
+      <input class="input" type="number" v-model="form.cubePrice" />
     </view>
 
     <view class="form-item">
-      <text class="label">运费</text>
-      <input class="input" type="number" v-model="freight" placeholder="" />
+      <text class="label">运费 / 吨</text>
+      <input class="input" type="number" v-model="freight" />
     </view>
 
     <view class="form-item">
@@ -82,14 +74,16 @@ export default {
       },
       unitPriceOptions: [
         {
-          label: '每平方单价',
+          label: '每米单价'
         },
         {
-          label: '每米单价',
+          label: '每块单价'
         },
         {
-          label: '每块单价',
+          label: '每平方单价'
         },
+       
+   
       ],
       selectUnitPrice: 0,
       factoryCost: 0, //出厂成本
@@ -98,38 +92,39 @@ export default {
       unitPriceCalMap: {
         //出厂成本Map
         factoryCost: {
-          0: () => {
+          2: () => {
             //=D15*A15*0.001
             const { len, width, cubePrice, thickness } = this.form
             return cubePrice * thickness * 0.001
           },
-          1: () => {
+          0: () => {
             //=A15*C15*D15*0.000001
             const { len, width, cubePrice, thickness } = this.form
             return cubePrice * thickness * width * 0.000001
           },
-          2: () => {
+          1: () => {
             //=A15*C15*B15*D15*0.000000001
             const { len, width, cubePrice, thickness } = this.form
+            console.log('len * cubePrice * thickness * width * 0.000000001',len * cubePrice * thickness * width * 0.000000001);
             return len * cubePrice * thickness * width * 0.000000001
           },
         },
         freightCost: {
           //运费成本Map
-          0: () => {
+          2: () => {
             //=D15*A15*0.001
             const { len, width, cubePrice, thickness } = this.form
-            return this.freight * thickness * 0.001
+            return this.freight * 2.7 * thickness * 0.001
           },
-          1: () => {
+          0: () => {
             //=A15*C15*D15*0.000001
             const { len, width, cubePrice, thickness } = this.form
-            return this.freight * thickness * width * 0.000001
+            return this.freight * 2.7 * thickness * width * 0.000001
           },
-          2: () => {
+          1: () => {
             //=A15*C15*B15*D15*0.000000001
             const { len, width, cubePrice, thickness } = this.form
-            return len * this.freight * thickness * width * 0.000000001
+            return len * this.freight * 2.7 * thickness * width * 0.000000001
           },
         },
       },
@@ -146,6 +141,7 @@ export default {
   onLoad() {},
   methods: {
     handleReset() {
+      this.isShowResult = false
       Object.keys(this.form).map((key) => (this.form[key] = ''))
     },
     isNil(value) {
@@ -170,15 +166,15 @@ export default {
       this.resultList = [
         {
           label: '出厂成本',
-          value: this.factoryCost,
+          value: this.factoryCost.toFixed(2)
         },
         {
           label: '运费成本',
-          value: this.freightCost,
+          value: this.freightCost.toFixed(2)
         },
         {
           label: '综合成本',
-          value: this.totalCost,
+          value: this.totalCost.toFixed(2)
         },
       ]
       this.isShowResult = true
@@ -194,6 +190,13 @@ export default {
 .form-content {
   width: 100%;
 }
+.form-inline {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+.form-inline-item,
 .form-item {
   width: 100%;
   height: 80rpx;
@@ -203,9 +206,26 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  margin: 20rpx 0 60rpx 0;
+  margin: 20rpx 0 66rpx 0;
   padding: 0 50rpx 0 40rpx;
   box-sizing: border-box;
+}
+.form-inline {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+.form-inline-item {
+  width: 32%;
+  margin: 30rpx 0;
+  padding: 0 20rpx;
+}
+.form-inline-label {
+  width: 40rpx;
+}
+.form-item:nth-child(4){
+  margin: 20rpx 0 0rpx 0;
 }
 .label {
   width: 140rpx;
@@ -221,16 +241,22 @@ export default {
 }
 
 .btn-groups {
-  margin: 100rpx 0;
+  margin: 60rpx 0;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
 }
 .left {
+  font-size: 18px;
   width: 180rpx;
+  height: 90rpx;
+  line-height: 90rpx;
   margin-right: 30rpx;
 }
 .right {
+  height: 90rpx;
+  line-height: 90rpx;
+  font-size: 18px;
   flex: 1;
   background: #1a1a44cc;
   color: #fff;

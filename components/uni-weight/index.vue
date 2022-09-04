@@ -1,23 +1,34 @@
 <template>
   <view class="form-content">
-    <view class="form-item">
+    <!-- <view class="form-item">
       <text class="label">长</text>
-      <input class="input" type="number" v-model="form.len" placeholder="" />
+      <input class="input" type="number" v-model="form.len" />
     </view>
     <view class="form-item">
       <text class="label">宽</text>
-      <input class="input" type="number" v-model="form.width" placeholder="" />
+      <input class="input" type="number" v-model="form.width" />
     </view>
 
     <view class="form-item">
       <text class="label">厚</text>
-      <input
-        class="input"
-        type="number"
-        v-model="form.thickness"
-        placeholder=""
-      />
+      <input class="input" type="number" v-model="form.thickness" />
+    </view> -->
+    <view class="form-inline">
+      <view class="form-inline-item">
+        <text class="form-inline-label">长</text>
+        <input class="input" type="number" v-model="form.len" />
+      </view>
+      <view class="form-inline-item">
+        <text class="form-inline-label">宽</text>
+        <input class="input" type="number" v-model="form.width" />
+      </view>
+
+      <view class="form-inline-item">
+        <text class="form-inline-label">厚</text>
+        <input class="input" type="number" v-model="form.thickness" />
+      </view>
     </view>
+
     <view class="form-item">
       <view class="label"> 数量规格 </view>
       <view class="label select">
@@ -30,7 +41,7 @@
           <view class="uni-input">{{ amountOptions[selectAmount].label }}</view>
         </picker>
       </view>
-      <input class="input" type="number" v-model="form.amount" placeholder="" />
+      <input class="input" type="number" v-model="form.amount" />
     </view>
 
     <view class="form-item">
@@ -134,25 +145,31 @@ export default {
   onLoad() {},
   methods: {
     handleReset() {
+      this.isShowResult = false
       Object.keys(this.form).map((key) => (this.form[key] = ''))
     },
     handleCal() {
       if (this.disabled) return
       this.productWeight =
         this.productWeightCalMap[parseInt(this.selectAmount)]()
-      this.isShowResult = true
-      if (this.selectWeight === 0) {
-        this.resultList.push({
-          label: '成品重量（吨）：',
-          value: this.productWeight,
-        })
+      if (+this.selectWeight === 0) {
+        this.resultList = [
+          {
+            label: '成品重量（吨）：',
+            value: this.productWeight.toFixed(2)
+          },
+        ]
+        this.isShowResult = true
         return
       }
       this.boardWeight = parseFloat(this.productWeight) * 1.2
-      this.resultList.push({
-        label: '毛板重量（吨）：',
-        value: this.boardWeight,
-      })
+      this.resultList = [
+        {
+          label: '毛板重量（吨）：',
+          value: this.boardWeight.toFixed(2)
+        },
+      ]
+      this.isShowResult = true
     },
     handleClick(val) {
       this.active = val
@@ -175,6 +192,8 @@ export default {
 .form-content {
   width: 100%;
 }
+
+.form-inline-item,
 .form-item {
   width: 100%;
   height: 80rpx;
@@ -184,9 +203,23 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  margin: 20rpx 0 60rpx 0;
+  margin: 40rpx 0 80rpx 0;
   padding: 0 50rpx 0 40rpx;
   box-sizing: border-box;
+}
+.form-inline {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+.form-inline-item {
+  width: 32%;
+  margin: 30rpx 0 30rpx 0;
+  padding: 0 20rpx;
+}
+.form-inline-label {
+  width: 40rpx;
 }
 .label {
   width: 140rpx;
@@ -202,16 +235,24 @@ export default {
 }
 
 .btn-groups {
-  margin: 100rpx 0;
+  
+  margin: 100rpx 0 60rpx;
   display: flex;
   flex-direction: row;
+ 
   justify-content: space-around;
 }
 .left {
+  font-size: 18px;
   width: 180rpx;
+  height: 90rpx;
+  line-height: 90rpx;
   margin-right: 30rpx;
 }
 .right {
+  height: 90rpx;
+  line-height: 90rpx;
+  font-size: 18px;
   flex: 1;
   background: #1a1a44cc;
   color: #fff;

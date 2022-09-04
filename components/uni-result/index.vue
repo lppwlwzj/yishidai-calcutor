@@ -25,17 +25,18 @@ export default {
 <style scoped>
 .result-wrapper {
   width: 100%;
-  font-size: 36rpx;
   color: #1a1a44cc;
+  margin-top: 60rpx ;
 }
 .result-title {
-  margin-bottom: 30rpx;
-  font-size: 38rpx;
+  margin-bottom: 20rpx;
+  font-size: 18px;
 }
 .result-content {
   width: 100%;
   margin: 0 auto;
-  padding: 30rpx;
+  padding: 20rpx 30rpx;
+  font-size: 16px;
   box-sizing: border-box;
   border: 1px solid #1a1a44cc;
   /* box-shadow: 1px 1px 1px #1a1a44cc; */

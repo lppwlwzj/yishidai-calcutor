@@ -1,21 +1,35 @@
 <template>
-  <view class="cal-content">
+  <!--  :style="[{ paddingTop: CustomBar + 'px' }]" -->
+  <view class="cal-content" :style="[{ paddingTop: CustomBar + 'px' }]">
+    <!-- <view
+      class="custom-bar"
+      :style="[
+        {
+          height: CustomBar + 'px',
+          paddingTop: StatusBar + 'px',
+          paddingRight: '200rpx',
+        },
+      ]"
+    >
+      <text class="title">成本计算器</text>
+    </view> -->
     <view class="cal-title">
       <text class="title">{{ title }}</text>
       <text class="contact" @click="contact">联系我们</text>
     </view>
     <view class="cal-tab">
       <view :class="['tab', { active: active === 0 }]" @click="handleClick(0)"
-        >计算重量</view
+        >计算路沿石</view
       >
       <view :class="['tab', { active: active === 1 }]" @click="handleClick(1)"
-        >计算路沿石</view
+        >计算重量</view
       >
     </view>
     <view class="cal-tab-content">
-      <uni-weight v-show="active === 0"></uni-weight>
-      <uni-curb v-show="active === 1"></uni-curb>
+      <uni-weight v-show="active === 1"></uni-weight>
+      <uni-curb v-show="active === 0"></uni-curb>
     </view>
+    <button open-type="contact" type="default">联系客服</button>
   </view>
 </template>
 
@@ -26,8 +40,10 @@ import uniCurb from '@/components/uni-curb/index.vue'
 export default {
   data() {
     return {
-      title: '内部成本计算器',
+      title: '易石代石材成本计算器',
       active: 0,
+      StatusBar: this.StatusBar,
+      CustomBar: this.CustomBar,
     }
   },
   components: {
@@ -35,6 +51,18 @@ export default {
     uniCurb,
   },
   onLoad() {},
+  onShareAppMessage: function (res) {
+    return {
+      title: '易石代石材成本计算器',
+      path: 'pages/index/index',
+      success: function (res) {
+        // console.log("转发成功:" + JSON.stringify(res));
+      },
+      fail: function (res) {
+        // console.log("转发失败:" + JSON.stringify(res));
+      },
+    }
+  },
   methods: {
     handleClick(val) {
       this.active = val
@@ -46,6 +74,7 @@ export default {
         animationDuration: 200,
       })
     },
+
     // handleAmountPickerChange(e) {
     //   this.selectAmount = e.detail.value
     // },
@@ -70,11 +99,13 @@ export default {
   display: flex;
   flex-direction: row;
   width: 100%;
-  margin: 10rpx 40rpx;
+  margin: 20rpx 40rpx 10rpx;
+
   justify-content: space-between;
 }
 .title {
   font-size: 36rpx;
+  font-weight: bold;
 }
 .contact {
   border: 1px solid #1a1a44cc;
@@ -82,7 +113,7 @@ export default {
 }
 .cal-tab {
   width: 100%;
-  margin: 30rpx 0;
+  margin: 30rpx 0 20rpx;
   color: #1a1a44cc;
   border: 1px solid #1a1a44cc;
   display: flex;
@@ -101,5 +132,14 @@ export default {
 }
 .cal-tab-content {
   width: 100%;
+}
+button {
+  width: 100%;
+  margin: 0 auto;
+  font-size: 18px;
+  height: 90rpx;
+  line-height: 90rpx;
+  /* background-color: #4d4d77cc;
+  color: #fff; */
 }
 </style>
