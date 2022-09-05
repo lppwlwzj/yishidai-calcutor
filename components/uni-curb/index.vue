@@ -2,16 +2,16 @@
   <view class="form-content">
     <view class="form-inline">
       <view class="form-inline-item">
-        <text class="form-inline-label">长</text>
+        <text class="form-inline-label">长/mm</text>
         <input class="input" type="number" v-model="form.len" />
       </view>
       <view class="form-inline-item">
-        <text class="form-inline-label">宽</text>
+        <text class="form-inline-label">宽/mm</text>
         <input class="input" type="number" v-model="form.width" />
       </view>
 
       <view class="form-inline-item">
-        <text class="form-inline-label">厚</text>
+        <text class="form-inline-label">厚/mm</text>
         <input class="input" type="number" v-model="form.thickness" />
       </view>
     </view>
@@ -222,7 +222,7 @@ export default {
   padding: 0 20rpx;
 }
 .form-inline-label {
-  width: 40rpx;
+  width: 50rpx;
 }
 .form-item:nth-child(4){
   margin: 20rpx 0 0rpx 0;
