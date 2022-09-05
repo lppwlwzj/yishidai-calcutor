@@ -1,8 +1,0 @@
-{
-  "navigationBarTitleText": "成本计算器",
-  "navigationBarTextStyle": "white",
-  "usingComponents": {
-    "uni-weight": "/components/uni-weight/index",
-    "uni-curb": "/components/uni-curb/index"
-  }
-}
