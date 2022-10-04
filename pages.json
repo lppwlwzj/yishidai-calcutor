@@ -1,5 +1,12 @@
 {
   "pages": [
+	  {
+	    "path": "pages/login/login",
+	    "style": {
+	      "navigationBarTitleText": "登录",
+	      "navigationBarTextStyle": "white"
+	    }
+	  },
     //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
     {
       "path": "pages/index/index",
@@ -14,7 +21,8 @@
         "navigationBarTitleText": "联系我们44"
       }
     }
-  ],
+      
+    ],
   "globalStyle": {
 	"navigationStyle": "custom",
     "navigationBarTextStyle": "black",

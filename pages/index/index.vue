@@ -15,21 +15,25 @@
     </view> -->
     <view class="cal-title">
       <text class="title">{{ title }}</text>
-      <text class="contact" @click="contact">联系我们</text>
+      <!-- <text class="contact" @click="contact">联系我们</text> -->
     </view>
     <view class="cal-tab">
-      <view :class="['tab', { active: active === 0 }]" @click="handleClick(0)"
-        >计算路沿石</view
-      >
-      <view :class="['tab', { active: active === 1 }]" @click="handleClick(1)"
-        >计算重量</view
-      >
+      <view :class="['tab', { active: active === 0 }]" @click="handleClick(0)">计算路沿石</view>
+      <view :class="['tab', { active: active === 1 }]" @click="handleClick(1)">计算重量</view>
     </view>
     <view class="cal-tab-content">
       <uni-weight v-show="active === 1"></uni-weight>
       <uni-curb v-show="active === 0"></uni-curb>
     </view>
     <button open-type="contact" type="default">联系客服</button>
+    <view class="info-content">
+      <text class="text">芝麻白</text>
+      <text class="text">芝麻灰</text>
+      <text class="text">芝麻黑</text>
+	  <text class="text">锈石</text>
+      <text class="text">市政园林工程花岗岩 地铺</text>
+      <text class="text">路沿石</text>
+    </view>
   </view>
 </template>
 
@@ -38,9 +42,9 @@ import uniWeight from '@/components/uni-weight/index.vue'
 import uniCurb from '@/components/uni-curb/index.vue'
 
 export default {
-  data() {
+  data () {
     return {
-      title: '易石代石材成本计算器',
+      title: '石材成本计算器',
       active: 0,
       StatusBar: this.StatusBar,
       CustomBar: this.CustomBar,
@@ -50,24 +54,22 @@ export default {
     uniWeight,
     uniCurb,
   },
-  onLoad() {},
+  onLoad () { },
   onShareAppMessage: function (res) {
     return {
-      title: '易石代石材成本计算器',
+      title: '石材成本计算器',
       path: 'pages/index/index',
       success: function (res) {
-        // console.log("转发成功:" + JSON.stringify(res));
       },
       fail: function (res) {
-        // console.log("转发失败:" + JSON.stringify(res));
       },
     }
   },
   methods: {
-    handleClick(val) {
+    handleClick (val) {
       this.active = val
     },
-    contact() {
+    contact () {
       uni.navigateTo({
         url: '/pages/contact/index',
         animationType: 'pop-in',
@@ -142,4 +144,25 @@ button {
   /* background-color: #4d4d77cc;
   color: #fff; */
 }
+.info-content {
+  margin-top: 60rpx;
+  width: 100%;
+  /* height: 240rpx; */
+  padding: 20rpx 0;
+  box-sizing: border-box;
+  background: #fff;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+
+}
+.text {
+   /* font-size: 14px; */
+    color: #fff;
+    background: #1a1a44cc;
+    padding: 26rpx 20rpx;
+    margin: 20rpx;
+}
+
+
 </style>

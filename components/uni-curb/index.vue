@@ -219,10 +219,10 @@ export default {
 .form-inline-item {
   width: 32%;
   margin: 30rpx 0;
-  padding: 0 20rpx;
+  padding: 0 16rpx;
 }
 .form-inline-label {
-  width: 50rpx;
+  width: 90rpx;
 }
 .form-item:nth-child(4){
   margin: 20rpx 0 0rpx 0;
