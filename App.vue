@@ -2,6 +2,13 @@
 import Vue from 'vue';
 export default {
 	onLaunch: function() {
+		//云开发初始化
+		//#ifdef MP-WEIXIN
+		wx.cloud.init({
+		env: 'calc-8guz5613ee562b39' ,//你的云空间id
+		traceUser: true
+		})
+		//#endif
 		uni.getSystemInfo({
 			success: function(e) {
 				// // #ifndef MP
@@ -24,6 +31,7 @@ export default {
 				// // #endif
 			}
 		});
+	
 	},
 	onShow: function() {
 		// uni.login({
@@ -43,7 +51,7 @@ export default {
 	},
 	onHide: function() {
 		console.log('App Hide');
-	}
+	},
 };
 </script>
 

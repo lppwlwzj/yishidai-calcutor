@@ -56,6 +56,7 @@
             "minified" : true,
             "postcss" : true
         },
+		"cloudfunctionRoot": "cloudfunctions/",
         "usingComponents" : true,
         "permission" : {}
     },

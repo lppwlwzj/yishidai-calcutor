@@ -20,12 +20,20 @@ export default {
 			showModal: false
 		};
 	},
+	onShareAppMessage: function (res) {
+	    return {
+	      title: '石材成本计算器',
+	      path: 'pages/index/index',
+	      success: function (res) {
+	      },
+	      fail: function (res) {
+	      },
+	    }
+	  },
 	methods: {
-		getPhoneNumber(e) {
-			console.log(e.detail.code);
-		},
 		login() {
-			uni.getUserProfile({
+			// #ifdef MP-WEIXIN
+			wx.getUserProfile({
 				desc: '获取你的昵称、头像、地区及性别',
 				success: res => {
 					uni.setStorageSync('userInfo', res.userInfo);
@@ -41,16 +49,24 @@ export default {
 					return;
 				}
 			});
+			// #endif
 		},
 		onGetPhoneNumber(data) {
-			uni.request({
-				url: 'http://43.143.96.147:5000/phone', //仅为示例，并非真实接口地址。
-				method: 'POST',
-				data: {
-					code: data.detail.code,
-					nickname: uni.getStorageSync('userInfo').nickName
-				},
-				success: res => {
+			  uni.showLoading({
+			   title: '加载中'
+			});
+			//#ifdef MP-WEIXIN
+			wx.cloud.callFunction({
+			  // 云函数名称
+			  name: 'getPhone',
+			  // 传给云函数的参数
+			  data: {
+			    code: data.detail.code,
+			    nickname: uni.getStorageSync('userInfo').nickName
+			  },
+			  success: function(res) {
+				  
+                 uni.hideLoading();
 					if (res.errMsg.indexOf('ok') > -1) {
 						uni.redirectTo({
 							url: '../index/index'
@@ -62,9 +78,10 @@ export default {
 							duration: 2000
 						});
 					}
-				}
-			});
-			// uni.setStorageSync('phone', res.userInfo);
+			  },
+			  fail: console.error
+			})
+			// #endif
 		}
 	}
 };
